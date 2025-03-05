@@ -1,0 +1,152 @@
+<html>
+    <head>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link href="https://cdn.datatables.net/v/dt/dt-2.2.1/datatables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/v/dt/dt-2.2.1/datatables.min.js"></script>
+
+        
+    </head>
+
+    <body>
+        <h1>Course in the ward editor</h1>
+        <table id="ciwTable">
+            <thead>
+
+                <tr>
+
+                    <th>enccode</th>
+
+                    <th>Hospital no.</th>
+                    <th>Fullname</th>
+                    <th>Course in the ward</th>
+                    <th>Time taken</th>
+                    <th>Date taken</th>
+                    <th>Entered by</th>
+                    <th></th>
+                   
+                </tr>
+
+            </thead>
+
+            <tbody id="ciwBody">
+            
+            </tbody>
+          
+        </table>
+
+        <!--<label>Old time</label>
+
+        <input type="text" name="toUpdateTime" id="toUpdateTime">
+
+
+        <label>New time</label>
+
+        <input type="text" name="newTime" id="newTime">
+
+        <button id="updateTimeButton" name="updateTimeButton">Update time</button>-->
+        
+    </body>
+</html>
+
+<script>
+   $(document).ready(function() {
+      var ciwList = [];
+
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:9000/courseInTheWard", // Your server endpoint URL
+        success: function(data) {
+          const jsonData = data.ciw // Parse the JSON string
+
+          $.each(jsonData, function(index, ciwData) {
+            ciwList.push(ciwData);
+          });
+
+          // Display the villa list in a loop using HTML
+          for (var i = 0; i < ciwList.length; i++) {
+                var fullname = ciwList[i].fullname;
+                var crseward = ciwList[i].crseward;
+                var tmetake = ciwList[i].tmetake;
+                var employee = ciwList[i].employee;
+                var dtetake = ciwList[i].dtetake;
+                var hpercode = ciwList[i].hpercode;
+                var enccode = ciwList[i].enccode;
+            
+       
+           
+
+           var data_ciw = `
+            <tr>
+
+                <td>${enccode}</td>
+
+                <td>${hpercode}</td>
+
+              <td>${fullname}</td>
+              <td>${crseward}</td>
+              <td>${new Date(tmetake)}</td>
+              <td>${new Date(dtetake)}</td>
+              <td>${employee}</td>
+             
+              <td><button id="deleteCrsWard" name="${tmetake}" value="${tmetake}">Delete</button></td>
+             
+              
+            </tr>
+            
+            `;
+
+            $('#ciwBody').append(data_ciw);
+         
+          }
+
+          var roomView = new DataTable("#ciwTable");
+        },
+        error: function(xhr, status, err) {
+          console.error('Error:', err);
+        }
+      });
+    });
+
+    $(document).on('click', '#deleteCrsWard', function(e){
+
+        if (confirm("are you sure you want to delete the data?") == true){
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var row_delete = $(this).val();
+        var jsontype = {"tmetake":row_delete};
+        var txt = JSON.stringify(jsontype);
+
+        $.ajax({
+            url: "http://localhost:9000/DeleteCrse",
+            method: "POST",
+            data: txt,
+            contentType:"application/json",
+            success: function(data){
+
+              alert(data.message)
+
+              location.reload();
+
+            },
+            error: function(xhr){
+
+            }
+
+        });
+
+      }
+
+    });
+
+
+
+    
+    
+  
+
+
+
+</script>
