@@ -24,6 +24,7 @@
                     <th>Date taken</th>
                     <th>Entered by</th>
                     <th></th>
+                    <th></th>
                    
                 </tr>
 
@@ -35,16 +36,16 @@
           
         </table>
 
-        <!--<label>Old time</label>
+        <label>Old time</label>
 
-        <input type="text" name="toUpdateTime" id="toUpdateTime">
+        <input type="text" name="oldTime" id="oldTime">
 
 
         <label>New time</label>
 
         <input type="text" name="newTime" id="newTime">
 
-        <button id="updateTimeButton" name="updateTimeButton">Update time</button>-->
+        <button id="updateTimeButton" name="updateTimeButton">Update time</button>
         
     </body>
 </html>
@@ -85,9 +86,11 @@
 
               <td>${fullname}</td>
               <td>${crseward}</td>
-              <td>${new Date(tmetake)}</td>
-              <td>${new Date(dtetake)}</td>
+              <td>${new Date(tmetake).toLocaleString()}</td>
+              <td>${new Date(dtetake).toLocaleString()}</td>
               <td>${employee}</td>
+
+              <td><button id="updateCrsWard" name="${tmetake}" value="${tmetake}">Update</button></td>
              
               <td><button id="deleteCrsWard" name="${tmetake}" value="${tmetake}">Delete</button></td>
              
@@ -139,7 +142,57 @@
 
       }
 
+
+     
+
     });
+
+
+    $(document).on('click', '#updateCrsWard', function(e){
+
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var row_update = new Date($(this).val());
+        alert(row_update.toLocaleString('en-AU'));
+
+        $("#oldTime").val(row_update.toLocaleString());
+
+        });
+
+
+        $(document).on('click', '#updateTimeButton', function(e){
+
+          var newTime = $("#newTime").val();
+          var oldTime = $("#oldTime").val();
+
+          var timeJSON = {"newTime":newTime, "oldTime":oldTime}
+
+          var txt = JSON.stringify(timeJSON);
+
+          $.ajax({
+
+            url: "http://localhost:9000/UpdateCrse",
+            method: "POST",
+            data: txt,
+            contentType:"application/json",
+
+            success: function(data){
+
+              alert(data.message);
+              location.reload();
+
+            }, 
+
+            error: function(xhr, status){
+
+            }
+
+          })
+
+
+
+        });
 
 
 
