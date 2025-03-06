@@ -49,13 +49,15 @@ app.post("/DeleteCrse", (req, res)=>{
 
       
 
+      });
+
     });
 
   app.post("/UpdateCrse", (req, res)=>{
 
-    var tmetake = new Date(req.body.tmetake); //old time
+    var tmetake = new Date(req.body.oldTime); //old time
 
-    var dtetake = new Date(req.body.dtetake); //new time
+    var dtetake = new Date(req.body.newTime); //new time
 
     console.log(tmetake);
     console.log(dtetake);
@@ -66,11 +68,17 @@ app.post("/DeleteCrse", (req, res)=>{
 
     connection.query(updatesqldte, [dtetake, tmetake], (err, rows)=>{
 
-            res.send({message:"Course in the ward updated"})
+      connection.query(updatesqltme, [dtetake, dtetake], (err, rows1)=>{
+
+        res.send({message:"Course in the ward updated"});
+
+      });
+
+            
 
     });
-  })
+  });
 
     
 
-});
+
