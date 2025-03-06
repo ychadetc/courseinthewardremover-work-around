@@ -161,7 +161,12 @@
         });
 
 
-        $(document).on('click', '#updateTimeButton', function(e){
+        $(document).on('click', '#updateTimeButton', function(e1){
+
+            e1.preventDefault();
+        e1.stopImmediatePropagation();
+
+            if (confirm("are you sure you want to update the data?") == true){
 
           var newTime = $("#newTime").val();
           var oldTime = $("#oldTime").val();
@@ -189,6 +194,8 @@
             }
 
           })
+
+      }
 
 
 
