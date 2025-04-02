@@ -59,6 +59,8 @@ app.post("/DeleteCrse", (req, res)=>{
 
     var dtetake = new Date(req.body.newTime); //new time
 
+    var updateSW = "Y"
+
     console.log(tmetake);
     console.log(dtetake);
     
@@ -66,11 +68,27 @@ app.post("/DeleteCrse", (req, res)=>{
     
     var updatesqltme = `update hcrsward set tmetake = ? where dtetake = ?`;
 
+    var updateSqlDateMod = `update hcrsward set datemod = now() where dtetake = ?`;
+
+    var updateToY = `update hcrsward set updsw = ? where tmetake = ?`
+
     connection.query(updatesqldte, [dtetake, tmetake], (err, rows)=>{
 
       connection.query(updatesqltme, [dtetake, dtetake], (err, rows1)=>{
 
-        res.send({message:"Course in the ward updated"});
+        connection.query(updateSqlDateMod,[dtetake], (err, rows2)=>{
+
+          connection.query(updateToY,[updateSW, dtetake], (err, rows2)=>{
+
+            res.send({message:"Course in the ward updated"});
+
+          });
+
+          
+
+        });
+
+        
 
       });
 
